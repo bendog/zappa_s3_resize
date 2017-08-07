@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "lambda_description": "Image file resizer lambda",
+    "aws_region": "ap-southeast-2",
+    "profile_name": "bendog",
+    "s3_bucket": "bendog-zappa-deploy",
+    "keep_warm": false,
+    "timeout_seconds": 300, // Maximum lifespan for the Lambda function (default 30, max 300.)
+    "environment_variables": {
+      "debug": "true",
+      "PYTHON_LOG_LEVEL": "info"
+    },
+    "events": [{
+      "function": "s3_resizer.process_s3_event",
+      "event_source": {
+        "arn": "arn:aws:s3:::bendog-image-resize-dev",
+        "events": [
+          "s3:ObjectCreated:*"
+        ]
+      }
+    }]
+  }
+}
