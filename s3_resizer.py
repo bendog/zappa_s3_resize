@@ -41,10 +41,12 @@ def resize_image(img, width, height, ext):
     return buffer.getvalue()
 
 
-def save_to_s3(bucket, file_key_name, file_data):
+def save_to_s3(file_key_name, file_data, bucket=config.IMAGE_OUTPUT_BUCKET):
     """ take the file contents and save it to S3 """
     s3 = boto3.resource('s3')
     s3.Object(bucket, file_key_name).put(Body=file_data)
+    logger.info("saving file %s:%s" % (bucket, file_key_name))
+    pass
 
 
 def process_s3_event(event, context):
@@ -73,7 +75,6 @@ def process_s3_event(event, context):
     for prefix, width, height, ext in config.IMAGE_CONVERSIONS:
         resize_data = resize_image(original_image_data, width, height, ext)
         new_file_key = ".".join(key.split('.')[:-1]) + ".%s" % ext  # new file key should have the new ext
-        save_to_s3(bucket, '%s/%s' % (prefix, new_file_key), resize_data)
-        logger.info("saving file %s:%s/%s" % (bucket, prefix, new_file_key))
+        save_to_s3('%s/%s' % (prefix, new_file_key), resize_data)
 
     pass
