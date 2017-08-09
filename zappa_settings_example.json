@@ -8,7 +8,9 @@
     "timeout_seconds": 300, // Maximum lifespan for the Lambda function (default 30, max 300.)
     "environment_variables": {
       "debug": "true",
-      "PYTHON_LOG_LEVEL": "info"
+      "PYTHON_LOG_LEVEL": "info",
+      "ALLOWED_EXTENTIONS": "png,gif,jpeg,jpg",
+      "RESIZER_OUTPUT_BUCKET": "bendog-image-output-dev"
     },
     "events": [{
       "function": "s3_resizer.process_s3_event",
